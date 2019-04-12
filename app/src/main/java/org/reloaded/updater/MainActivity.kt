@@ -1,4 +1,4 @@
-package com.rupanshkek.relcafupdt
+package org.reloaded.updater
 
 import android.content.Context
 import android.content.Intent
@@ -16,20 +16,20 @@ import androidx.appcompat.app.AppCompatActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.alespero.expandablecardview.ExpandableCardView
-import kotlinx.android.synthetic.main.activity_scrolling.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
 
 
-class ScrollingActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private var networkAvail = false
     private var latestLink = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scrolling)
+        setContentView(R.layout.activity_main)
 
         fab.setOnClickListener {
             checkNetwork()
@@ -41,7 +41,7 @@ class ScrollingActivity : AppCompatActivity() {
                 getLink()
                 updateReq()
             } else{
-                MaterialDialog(this@ScrollingActivity).show {
+                MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
                     title(text = "No Internet Access")
                     message(text = "Turn on Cellular Data/WiFi to fetch updates!")
@@ -76,7 +76,7 @@ class ScrollingActivity : AppCompatActivity() {
 
             uiThread {
                 if (checkLatestArr[0].toInt() < checkLatestArr[1].toInt()) {
-                    MaterialDialog(this@ScrollingActivity).show {
+                    MaterialDialog(this@MainActivity).show {
                         icon(R.drawable.ic_update)
                         title(text = "Update available!")
                         message(text = "Latest Build: ${checkLatestArr[1]}\nDownload?")
@@ -89,7 +89,7 @@ class ScrollingActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    MaterialDialog(this@ScrollingActivity).show {
+                    MaterialDialog(this@MainActivity).show {
                         icon(R.drawable.ic_checkmark)
                         title(text = "You are up-to-date!")
                         negativeButton(text = "Close") { }
@@ -142,7 +142,7 @@ class ScrollingActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_scrolling, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 

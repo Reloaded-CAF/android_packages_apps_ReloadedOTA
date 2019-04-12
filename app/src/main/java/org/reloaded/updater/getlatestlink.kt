@@ -1,4 +1,4 @@
-package com.rupanshkek.relcafupdt
+package org.reloaded.updater
 
 import org.jsoup.Jsoup
 
