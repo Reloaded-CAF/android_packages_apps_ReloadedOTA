@@ -4,9 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Response {
+    @SerializedName("device_supported")
+    @Expose
+    private int device_supported;
+
     @SerializedName("update_available")
     @Expose
-    private Boolean update_available;
+    private int update_available;
 
     @SerializedName("latest_build")
     @Expose
@@ -16,27 +20,35 @@ public class Response {
     @Expose
     private String latest_build_download_url;
 
-    public Boolean getUpdateAvailable() {
-        return update_available;
+    @SerializedName("xda_link")
+    @Expose
+    private String xda_link;
+
+    @SerializedName("maintainer")
+    @Expose
+    private String maintainer;
+
+    public int getDeviceSupported() {
+        return device_supported;
     }
 
-    public void setUpdateAvailable(Boolean update_available) {
-        this.update_available = update_available;
+    public int getUpdateAvailable() {
+        return update_available;
     }
 
     public String getLatestBuild() {
         return latest_build;
     }
 
-    public void setLatestBuild(String latest_build) {
-        this.latest_build = latest_build;
-    }
-
     public String getLatestBuildURL() {
         return latest_build_download_url;
     }
 
-    public void setLatestBuildURL(String latest_build_download_url) {
-        this.latest_build_download_url = latest_build_download_url;
+    public String getXDALink() {
+        return xda_link;
+    }
+
+    public String getMaintainerName() {
+        return maintainer;
     }
 }

@@ -28,6 +28,4 @@
         android:textColor="@android:color/background_light"
         android:textStyle="italic"
         android:visibility="gone"/>
-
-
 </RelativeLayout>

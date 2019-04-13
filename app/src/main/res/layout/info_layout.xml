@@ -24,7 +24,7 @@
         android:layout_marginStart="5dp"
         android:text=""
         android:textColor="@color/md_disabled_text_light_theme"
-        android:textSize="17sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/builddt_title"
@@ -48,7 +48,7 @@
         android:layout_marginStart="5dp"
         android:text=""
         android:textColor="@color/md_disabled_text_light_theme"
-        android:textSize="17sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/maintainer_title"
@@ -69,8 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/maintainer_title"
         android:layout_marginStart="5dp"
-        android:text="@string/maintainer_name"
+        android:text=""
         android:textColor="@color/md_disabled_text_light_theme"
-        android:textSize="17sp" />
-
+        android:textSize="14sp" />
 </RelativeLayout>

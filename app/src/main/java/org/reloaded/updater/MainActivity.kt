@@ -8,8 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
@@ -28,6 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import android.provider.Settings
 import android.util.Log
+import android.view.View.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,12 +52,9 @@ class MainActivity : AppCompatActivity() {
                     negativeButton(text = "Quit") { finish(); moveTaskToBack(true) }
                     onDismiss { finish(); moveTaskToBack(true) }
                 }
-                val latestzipcard = findViewById<ExpandableCardView>(R.id.latzip)
-                val textView = findViewById<Button>(R.id.lat_button)
-                val romincard = findViewById<ExpandableCardView>(R.id.rominfo)
-                textView.visibility = INVISIBLE
-                latestzipcard.visibility = INVISIBLE
-                romincard.visibility = INVISIBLE
+                findViewById<ExpandableCardView>(R.id.latzip).visibility = GONE
+                findViewById<Button>(R.id.lat_button).visibility = GONE
+                findViewById<ExpandableCardView>(R.id.rominfo).visibility = GONE
             }
         }
 
@@ -78,35 +74,44 @@ class MainActivity : AppCompatActivity() {
     private fun updateReq() {
         doAsync {
             uiThread {
-                if (updateresponse?.updateAvailable == true) {
-                    MaterialDialog(this@MainActivity).show {
-                        icon(R.drawable.ic_update)
-                        title(text = "Update available!")
-                        message(text = "Latest Build: ${updateresponse?.latestBuild}\nDownload?")
-                        positiveButton(text = "Yes") {
-                            val openURL = Intent(Intent.ACTION_VIEW)
-                            openURL.data = Uri.parse(updateresponse?.latestBuildURL)
-                            startActivity(openURL)
+                if(updateresponse!!.deviceSupported == 1){
+                    if (updateresponse!!.updateAvailable == 1) {
+                        MaterialDialog(this@MainActivity).show {
+                            icon(R.drawable.ic_update)
+                            title(text = "Update available!")
+                            message(text = "Latest Build: ${updateresponse!!.latestBuild}\nDownload?")
+                            positiveButton(text = "Yes") {
+                                val openURL = Intent(Intent.ACTION_VIEW)
+                                openURL.data = Uri.parse(updateresponse!!.latestBuildURL)
+                                startActivity(openURL)
+                            }
+                            negativeButton(text = "Cancel") { }
                         }
-                        negativeButton(text = "Cancel") { }
+                    } else {
+                        MaterialDialog(this@MainActivity).show {
+                            icon(R.drawable.ic_checkmark)
+                            title(text = "You are up-to-date!")
+                            negativeButton(text = "Close") { }
+                        }
                     }
-                }
-                else {
+
+                    findViewById<TextView>(R.id.device).text = android.os.Build.DEVICE
+                    findViewById<TextView>(R.id.builddt).text = getBuildDate()
+                    findViewById<TextView>(R.id.maintainer_name).text = updateresponse?.maintainerName
+                    fab.clearAnimation()
+                }else{
+                    findViewById<ExpandableCardView>(R.id.latzip).visibility = GONE
+                    findViewById<Button>(R.id.lat_button).visibility = GONE
+                    findViewById<ExpandableCardView>(R.id.rominfo).visibility = GONE
                     MaterialDialog(this@MainActivity).show {
-                        icon(R.drawable.ic_checkmark)
-                        title(text = "You are up-to-date!")
-                        negativeButton(text = "Close") { }
+                        icon(R.drawable.ic_warning)
+                        title(text = "Error!")
+                        message(text = "Your device is not officially supported.")
+                        negativeButton(text = "Quit") { finish(); moveTaskToBack(true) }
+                        onDismiss { finish(); moveTaskToBack(true) }
                     }
+                    fab.clearAnimation()
                 }
-
-                val device = findViewById<TextView>(R.id.device)
-                val buildDate = findViewById<TextView>(R.id.builddt)
-
-                device.text = android.os.Build.DEVICE
-
-                buildDate.text = getBuildDate()
-
-                fab.clearAnimation()
             }
         }
     }
@@ -116,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         if(version != null) {
             return version.split("-")[3]
         }else{
-            return "20180101"
+            return "20190101"
         }
     }
 
@@ -130,7 +135,6 @@ class MainActivity : AppCompatActivity() {
 
             uiThread {
                 latestButton.visibility = INVISIBLE
-                toast("Checking for updates!")
 
                 latName.text = linktext
 
