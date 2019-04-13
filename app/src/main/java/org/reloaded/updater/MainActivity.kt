@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             if (networkAvail) {
                 val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
                 fab.startAnimation(rotateAnim)
-                apicall()
+                checkUpdate()
             } else{
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
@@ -71,9 +71,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Displays Update availability
-    private fun updateReq() {
+    private fun updateResponse() {
         doAsync {
             uiThread {
+                val latestButton = findViewById<Button>(R.id.lat_button)
+                val latestLink = updateresponse?.latestBuildURL
+                val linktext = updateresponse?.latestBuild
+                val latName = findViewById<TextView>(R.id.lat_name)
+
+                latestButton.visibility = INVISIBLE
+                latName.text = linktext
+                latestButton.visibility = VISIBLE
+                latestButton.setOnClickListener{
+                    val openURL = Intent(Intent.ACTION_VIEW)
+                    openURL.data = Uri.parse(latestLink)
+                    startActivity(openURL)
+                }
+
                 if(updateresponse!!.deviceSupported == 1){
                     if (updateresponse!!.updateAvailable == 1) {
                         MaterialDialog(this@MainActivity).show {
@@ -136,32 +150,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Displays latest zip link
-    private fun getLink() {
-        doAsync {
-            val latestButton = findViewById<Button>(R.id.lat_button)
-            val latestLink = updateresponse?.latestBuildURL
-            val linktext = updateresponse?.latestBuild
-            val latName = findViewById<TextView>(R.id.lat_name)
-
-            uiThread {
-                latestButton.visibility = INVISIBLE
-
-                latName.text = linktext
-
-                latestButton.visibility = VISIBLE
-
-                latestButton.setOnClickListener{
-                    val openURL = Intent(Intent.ACTION_VIEW)
-                    openURL.data = Uri.parse(latestLink)
-                    startActivity(openURL)
-                }
-            }
-        }
-    }
-
     @SuppressLint("HardwareIds")
-    private fun apicall(){
+    private fun checkUpdate(){
         doAsync {
             uiThread {
                 val device = android.os.Build.DEVICE
@@ -173,8 +163,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                         if (response.body() != null) {
                             updateresponse = response.body()
-                            getLink()
-                            updateReq()
+                            updateResponse()
                         }
                     }
 

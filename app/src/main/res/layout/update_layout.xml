@@ -12,7 +12,7 @@
         android:layout_marginStart="3dp"
         android:text=""
         android:textColor="@color/md_disabled_text_light_theme"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
     <Button
         android:id="@+id/lat_button"
