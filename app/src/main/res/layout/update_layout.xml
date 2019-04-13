@@ -26,7 +26,8 @@
         android:fontFamily="sans-serif-black"
         android:text="@string/lat_buttontxt"
         android:textColor="@android:color/background_light"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

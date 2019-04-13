@@ -1,5 +1,6 @@
 package org.reloaded.updater
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -20,26 +21,30 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
-
+import org.reloaded.updater.api.ApiInterface
+import org.reloaded.updater.api.ApiClient
+import org.reloaded.updater.api.Response
+import retrofit2.Call
+import retrofit2.Callback
+import android.provider.Settings
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
     private var networkAvail = false
-    private var latestLink = ""
+    var apiInterface: ApiInterface? = null
+    var updateresponse: Response?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         fab.setOnClickListener {
             checkNetwork()
 
             if (networkAvail) {
                 val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
                 fab.startAnimation(rotateAnim)
-
-                getLink()
-                updateReq()
+                apicall()
             } else{
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
@@ -58,9 +63,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         fab.performClick()
+        apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
 
     }
-
 
     // Checks internet access
     private fun checkNetwork(){
@@ -72,17 +77,15 @@ class MainActivity : AppCompatActivity() {
     // Displays Update availability
     private fun updateReq() {
         doAsync {
-            val checkLatestArr = checkLatest()
-
             uiThread {
-                if (checkLatestArr[0].toInt() < checkLatestArr[1].toInt()) {
+                if (updateresponse?.updateAvailable == true) {
                     MaterialDialog(this@MainActivity).show {
                         icon(R.drawable.ic_update)
                         title(text = "Update available!")
-                        message(text = "Latest Build: ${checkLatestArr[1]}\nDownload?")
+                        message(text = "Latest Build: ${updateresponse?.latestBuild}\nDownload?")
                         positiveButton(text = "Yes") {
                             val openURL = Intent(Intent.ACTION_VIEW)
-                            openURL.data = Uri.parse(latestLink)
+                            openURL.data = Uri.parse(updateresponse?.latestBuildURL)
                             startActivity(openURL)
                         }
                         negativeButton(text = "Cancel") { }
@@ -97,36 +100,39 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val device = findViewById<TextView>(R.id.device)
-                val yerdate = checkLatestArr[0]
                 val buildDate = findViewById<TextView>(R.id.builddt)
 
                 device.text = android.os.Build.DEVICE
 
-                buildDate.text = yerdate
+                buildDate.text = getBuildDate()
 
                 fab.clearAnimation()
             }
         }
     }
 
+    private fun getBuildDate() : String{
+        val version = SystemPropertiesProxy.get(applicationContext,"ro.reloaded.version")
+        if(version != null) {
+            return version.split("-")[3]
+        }else{
+            return "20180101"
+        }
+    }
 
     // Displays latest zip link
     private fun getLink() {
         doAsync {
             val latestButton = findViewById<Button>(R.id.lat_button)
+            val latestLink = updateresponse?.latestBuildURL
+            val linktext = updateresponse?.latestBuild
+            val latName = findViewById<TextView>(R.id.lat_name)
 
             uiThread {
                 latestButton.visibility = INVISIBLE
                 toast("Checking for updates!")
-            }
 
-            latestLink = getDeviceLink()
-            val linktext = latestLink.split('/')
-
-            uiThread {
-                val latName = findViewById<TextView>(R.id.lat_name)
-
-                latName.text = linktext[linktext.lastIndex - 1]
+                latName.text = linktext
 
                 latestButton.visibility = VISIBLE
 
@@ -135,6 +141,32 @@ class MainActivity : AppCompatActivity() {
                     openURL.data = Uri.parse(latestLink)
                     startActivity(openURL)
                 }
+            }
+        }
+    }
+
+    @SuppressLint("HardwareIds")
+    private fun apicall(){
+        doAsync {
+            uiThread {
+                val device = android.os.Build.DEVICE
+                val builddate = getBuildDate()
+                val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                val call = apiInterface?.checkupdates(device, androidId, builddate)
+                toast("Checking for updates!")
+                call?.enqueue(object : Callback<Response> {
+                    override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
+                        if (response.body() != null) {
+                            updateresponse = response.body()
+                            getLink()
+                            updateReq()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Response>, t: Throwable) {
+                        //
+                    }
+                })
             }
         }
     }
