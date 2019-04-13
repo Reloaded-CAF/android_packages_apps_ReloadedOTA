@@ -6,8 +6,10 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.*
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
@@ -16,17 +18,15 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.alespero.expandablecardview.ExpandableCardView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.info_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.uiThread
-import org.reloaded.updater.api.ApiInterface
 import org.reloaded.updater.api.ApiClient
+import org.reloaded.updater.api.ApiInterface
 import org.reloaded.updater.api.Response
 import retrofit2.Call
 import retrofit2.Callback
-import android.provider.Settings
-import android.util.Log
-import android.view.View.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -98,6 +98,18 @@ class MainActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.device).text = android.os.Build.DEVICE
                     findViewById<TextView>(R.id.builddt).text = getBuildDate()
                     findViewById<TextView>(R.id.maintainer_name).text = updateresponse?.maintainerName
+                    xda_thread.setOnClickListener {
+                        MaterialDialog(this@MainActivity).show {
+                            title(text = "Are You sure?")
+                            message(text = "This will open a browser window")
+                            positiveButton(text = "Yes") {
+                                val openURL = Intent(Intent.ACTION_VIEW)
+                                openURL.data = Uri.parse(updateresponse!!.xdaLink)
+                                startActivity(openURL)
+                            }
+                            negativeButton(text = "Cancel") { }
+                        }
+                    }
                     fab.clearAnimation()
                 }else{
                     findViewById<ExpandableCardView>(R.id.latzip).visibility = GONE
@@ -118,10 +130,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun getBuildDate() : String{
         val version = SystemPropertiesProxy.get(applicationContext,"ro.reloaded.version")
-        if(version != null) {
-            return version.split("-")[3]
-        }else{
-            return "20190101"
+        return when(version != null){
+            true -> version.split("-")[3]
+            false -> "20190101"
         }
     }
 
