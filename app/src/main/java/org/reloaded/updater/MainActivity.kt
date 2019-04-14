@@ -1,3 +1,5 @@
+@file:Suppress("ConstantConditionIf")
+
 package org.reloaded.updater
 
 import android.annotation.SuppressLint
@@ -30,8 +32,7 @@ import retrofit2.Callback
 
 class MainActivity : AppCompatActivity() {
 
-    private var networkAvail = false
-    var apiInterface: ApiInterface? = null
+    private var apiInterface: ApiInterface? = null
     var updateresponse: Response?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             checkNetwork()
 
-            if (networkAvail) {
+            if (checkNetwork()) {
                 val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
                 fab.startAnimation(rotateAnim)
                 checkUpdate()
@@ -59,15 +60,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         fab.performClick()
-        apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
+        apiInterface = ApiClient.apiClient.create(ApiInterface::class.java)
 
     }
 
     // Checks internet access
-    private fun checkNetwork(){
-        val connected = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netinfo = connected.activeNetworkInfo
-        networkAvail = netinfo != null && netinfo.isConnected
+    private fun checkNetwork(): Boolean{
+        val networkInfo = (baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 
     // Displays Update availability
@@ -76,11 +76,11 @@ class MainActivity : AppCompatActivity() {
             uiThread {
                 val latestButton = findViewById<Button>(R.id.lat_button)
                 val latestLink = updateresponse?.latestBuildURL
-                val linktext = updateresponse?.latestBuild
+                val linkText = updateresponse?.latestBuild
                 val latName = findViewById<TextView>(R.id.lat_name)
 
                 latestButton.visibility = INVISIBLE
-                latName.text = linktext
+                latName.text = linkText
                 latestButton.visibility = VISIBLE
                 latestButton.setOnClickListener{
                     val openURL = Intent(Intent.ACTION_VIEW)
@@ -143,8 +143,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getBuildDate() : String{
-        val version = SystemPropertiesProxy.get(applicationContext,"ro.reloaded.version")
-        return when(version != null){
+        val version = SystemPropertiesProxy[applicationContext, "ro.reloaded.version"]
+        return when(version != ""){
             true -> version.split("-")[3]
             false -> "20190101"
         }
