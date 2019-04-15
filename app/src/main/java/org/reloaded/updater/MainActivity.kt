@@ -2,6 +2,10 @@
 
 package org.reloaded.updater
 
+import android.app.AlarmManager
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -22,20 +26,31 @@ import kotlinx.android.synthetic.main.info_layout.*
 import org.reloaded.updater.api.Response
 import org.reloaded.updater.tasks.CheckUpdate
 import org.reloaded.updater.utils.Common
+import org.reloaded.updater.utils.OTAService
 
-class MainActivity(override val context: Context) : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
+class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        scheduleJob()
+
         fab.setOnClickListener {
 
             if (Common.checkNetwork(baseContext)) {
                 val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
                 fab.startAnimation(rotateAnim)
 
+                val extras = intent.extras
+                if (extras != null) {
+                    val response = extras.getSerializable("response") as Response
+                    processResult(response)
+                }
+
                 val checkUpdateTask = CheckUpdate(false, this)
-                 checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             } else{
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
@@ -53,6 +68,22 @@ class MainActivity(override val context: Context) : AppCompatActivity(), CheckUp
         fab.performClick()
 
     }
+
+    private fun scheduleJob() {
+        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+
+        if (jobScheduler.getPendingJob(0) == null) {
+            val builder = JobInfo.Builder(0, ComponentName(this, OTAService::class.java))
+            builder.setPeriodic(AlarmManager.INTERVAL_DAY)
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+            builder.setPersisted(true)
+
+            jobScheduler.schedule(builder.build())
+        }
+    }
+
+    override val callbackContext: Context
+        get() = this
 
     override fun processResult(response: Response) {
 
@@ -92,7 +123,7 @@ class MainActivity(override val context: Context) : AppCompatActivity(), CheckUp
             }
 
             findViewById<TextView>(R.id.device).text = android.os.Build.DEVICE
-            findViewById<TextView>(R.id.builddt).text = Common.getBuildDate(context)
+            findViewById<TextView>(R.id.builddt).text = Common.getBuildDate(this)
             findViewById<TextView>(R.id.maintainer_name).text = response.maintainerName
             xda_thread.setOnClickListener {
                 MaterialDialog(this@MainActivity).show {

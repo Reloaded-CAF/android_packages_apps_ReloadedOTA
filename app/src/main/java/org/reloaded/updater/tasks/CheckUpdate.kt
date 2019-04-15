@@ -19,7 +19,7 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
     private val callback: UpdateCheckerCallback? = callback
 
     interface UpdateCheckerCallback {
-        val context: Context
+        val callbackContext: Context
         fun processResult(response: Response)
     }
 
@@ -31,12 +31,12 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
     override fun doInBackground(vararg params: Void?): Response {
 
         val device = android.os.Build.DEVICE
-        val buildDate = Common.getBuildDate(callback?.context!!)
-        val androidId = Settings.Secure.getString(callback.context.contentResolver, Settings.Secure.ANDROID_ID)
+        val buildDate = Common.getBuildDate(callback?.callbackContext!!)
+        val androidId = Settings.Secure.getString(callback.callbackContext.contentResolver, Settings.Secure.ANDROID_ID)
         val call = apiInterface?.checkupdates(device, androidId, buildDate)
         var updateResponse: Response? = null
 
-        if (!isBackground) callback.context.toast("Checking for updates!")
+        if (!isBackground) callback.callbackContext.toast("Checking for updates!")
 
         call?.enqueue(object : Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {

@@ -14,4 +14,10 @@
     <string name="maintainer_title">"Maintainer"</string>
     <string name="xda_title">"Thread"</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Notifications -->
+    <string name="notification_message">New version is available!</string>
+    <string name="notification_title">OTA Update</string>
+    <string name="channel">ReloadedOTA notifications</string>
+    <string name="channel_description">Notifications about new ReloadedCAF updates</string>
 </resources>
