@@ -27,6 +27,8 @@ import org.jetbrains.anko.uiThread
 import org.reloaded.updater.api.ApiClient
 import org.reloaded.updater.api.ApiInterface
 import org.reloaded.updater.api.Response
+import org.reloaded.updater.utils.Common
+import org.reloaded.updater.utils.SystemPropertiesProxy
 import retrofit2.Call
 import retrofit2.Callback
 
@@ -39,9 +41,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fab.setOnClickListener {
-            checkNetwork()
 
-            if (checkNetwork()) {
+            if (Common.checkNetwork(baseContext)) {
                 val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
                 fab.startAnimation(rotateAnim)
                 checkUpdate()
@@ -62,12 +63,6 @@ class MainActivity : AppCompatActivity() {
         fab.performClick()
         apiInterface = ApiClient.apiClient.create(ApiInterface::class.java)
 
-    }
-
-    // Checks internet access
-    private fun checkNetwork(): Boolean{
-        val networkInfo = (baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
     }
 
     // Displays Update availability
