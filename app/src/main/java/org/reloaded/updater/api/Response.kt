@@ -2,29 +2,30 @@ package org.reloaded.updater.api
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class Response {
+class Response: Serializable{
     @SerializedName("device_supported")
     @Expose
-    val deviceSupported: Int = 0
+    var deviceSupported: Int = 0
 
     @SerializedName("update_available")
     @Expose
-    val updateAvailable: Int = 0
+    var updateAvailable: Int = 0
 
     @SerializedName("latest_build")
     @Expose
-    val latestBuild: String? = null
+    var latestBuild: String? = null
 
     @SerializedName("latest_build_download_url")
     @Expose
-    val latestBuildURL: String? = null
+    var latestBuildURL: String? = null
 
     @SerializedName("xda_link")
     @Expose
-    val xdaLink: String? = null
+    var xdaLink: String? = null
 
     @SerializedName("maintainer")
     @Expose
-    val maintainerName: String? = null
+    var maintainerName: String? = null
 }
