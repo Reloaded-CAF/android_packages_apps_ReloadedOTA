@@ -44,15 +44,18 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                 val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
                 fab.startAnimation(rotateAnim)
 
+
+
                 val extras = intent.extras
                 if (extras != null) {
                     val response = extras.getSerializable("response") as Response
                     processResult(response)
+                } else {
+                    toast("Checking for updates!")
+                    val checkUpdateTask = CheckUpdate(false, this)
+                    checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 }
 
-                toast("Checking for updates!")
-                val checkUpdateTask = CheckUpdate(false, this)
-                checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             } else{
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
