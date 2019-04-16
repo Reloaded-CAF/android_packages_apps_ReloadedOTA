@@ -34,7 +34,7 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
         val buildDate = Common.getBuildDate(callback?.callbackContext!!)
         val androidId = Settings.Secure.getString(callback.callbackContext.contentResolver, Settings.Secure.ANDROID_ID)
         val call = apiInterface?.checkupdates(device, androidId, buildDate)
-        var updateResponse: Response? = null
+        var updateResponse: Response? = Response()
 
         if (!isBackground) callback.callbackContext.toast("Checking for updates!")
 

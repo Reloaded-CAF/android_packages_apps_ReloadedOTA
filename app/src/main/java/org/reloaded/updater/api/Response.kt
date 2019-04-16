@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class Response: Serializable{
+
     @SerializedName("device_supported")
     @Expose
     var deviceSupported: Int = 0
@@ -28,4 +29,12 @@ class Response: Serializable{
     @SerializedName("maintainer")
     @Expose
     var maintainerName: String? = null
+
+    init {
+        latestBuild = ""
+        latestBuildURL = ""
+        xdaLink = ""
+        maintainerName = ""
+    }
+
 }
