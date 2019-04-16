@@ -4,37 +4,30 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class Response: Serializable{
+class Response(@Expose @SerializedName("device_supported") private val _deviceSupported: Int = 0,
+               @Expose @SerializedName("update_available") private val _updateAvailable: Int = 0,
+               @Expose @SerializedName("latest_build") private val _latestBuild: String? = "",
+               @Expose @SerializedName("latest_build_download_url") private val _latestBuildURL: String? = "",
+               @Expose @SerializedName("xda_link") private val _xdaLink: String? = "",
+               @Expose @SerializedName("maintainer") private val _maintainerName: String? = ""): Serializable{
 
-    @SerializedName("device_supported")
-    @Expose
-    var deviceSupported: Int = 0
 
-    @SerializedName("update_available")
-    @Expose
-    var updateAvailable: Int = 0
+    val deviceSupported
+        get() = _deviceSupported
 
-    @SerializedName("latest_build")
-    @Expose
-    var latestBuild: String? = null
+    val updateAvailable
+        get() = _updateAvailable
 
-    @SerializedName("latest_build_download_url")
-    @Expose
-    var latestBuildURL: String? = null
+    val latestBuild
+        get() = _latestBuild
 
-    @SerializedName("xda_link")
-    @Expose
-    var xdaLink: String? = null
+    val latestBuildURL
+        get() = _latestBuildURL
 
-    @SerializedName("maintainer")
-    @Expose
-    var maintainerName: String? = null
+    val xdaLink
+        get() = _xdaLink
 
-    init {
-        latestBuild = ""
-        latestBuildURL = ""
-        xdaLink = ""
-        maintainerName = ""
-    }
+    val maintainerName
+        get() = _maintainerName
 
 }

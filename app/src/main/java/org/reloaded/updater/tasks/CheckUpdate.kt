@@ -34,21 +34,25 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
         val buildDate = Common.getBuildDate(callback?.callbackContext!!)
         val androidId = Settings.Secure.getString(callback.callbackContext.contentResolver, Settings.Secure.ANDROID_ID)
         val call = apiInterface?.checkupdates(device, androidId, buildDate)
-        var updateResponse: Response? = Response()
+        var updateResponse = Response()
+        var responseReceived = false
 
         call?.enqueue(object : Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                 if (response.body() != null) {
                     updateResponse = response.body()
+                    responseReceived = true
                 }
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
-                //
+                responseReceived = true
             }
         })
 
-        return updateResponse!!
+        while (!responseReceived) Thread.sleep(1000)
+
+        return updateResponse
 
     }
 
