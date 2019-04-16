@@ -23,6 +23,7 @@ import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.alespero.expandablecardview.ExpandableCardView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.info_layout.*
+import org.jetbrains.anko.toast
 import org.reloaded.updater.api.Response
 import org.reloaded.updater.tasks.CheckUpdate
 import org.reloaded.updater.utils.Common
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                     processResult(response)
                 }
 
+                toast("Checking for updates!")
                 val checkUpdateTask = CheckUpdate(false, this)
                 checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             } else{

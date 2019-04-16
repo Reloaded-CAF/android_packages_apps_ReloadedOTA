@@ -36,8 +36,6 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
         val call = apiInterface?.checkupdates(device, androidId, buildDate)
         var updateResponse: Response? = Response()
 
-        if (!isBackground) callback.callbackContext.toast("Checking for updates!")
-
         call?.enqueue(object : Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                 if (response.body() != null) {
