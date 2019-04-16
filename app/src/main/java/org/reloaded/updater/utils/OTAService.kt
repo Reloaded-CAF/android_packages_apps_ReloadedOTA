@@ -42,7 +42,7 @@ class OTAService: JobService(), CheckUpdate.UpdateCheckerCallback {
         if (response.deviceSupported == 1 && response.updateAvailable == 1) {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val notifyID = 1
-            val id = "reloaded ota"
+            val id = "reloaded_update"
             val name = getString(R.string.channel)
             val description = getString(R.string.channel_description)
             val importance = NotificationManager.IMPORTANCE_LOW
@@ -50,7 +50,7 @@ class OTAService: JobService(), CheckUpdate.UpdateCheckerCallback {
             mChannel.description = description
             notificationManager.createNotificationChannel(mChannel)
 
-            val mBuilder = NotificationCompat.Builder(applicationContext, "Reloaded OTA")
+            val mBuilder = NotificationCompat.Builder(applicationContext, "Reloaded Updates")
                 .setSmallIcon(R.drawable.ic_device)
                 .setContentTitle(getString(R.string.notification_title))
                 .setContentText(getString(R.string.notification_message))

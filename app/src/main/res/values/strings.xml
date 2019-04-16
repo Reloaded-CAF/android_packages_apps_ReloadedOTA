@@ -17,7 +17,7 @@
 
     <!-- Notifications -->
     <string name="notification_message">New version is available!</string>
-    <string name="notification_title">OTA Update</string>
-    <string name="channel">ReloadedOTA notifications</string>
-    <string name="channel_description">Notifications about new ReloadedCAF updates</string>
+    <string name="notification_title">Update available!</string>
+    <string name="channel">Reloaded-CAF Updates</string>
+    <string name="channel_description">Notifications about new Reloaded-CAF updates</string>
 </resources>

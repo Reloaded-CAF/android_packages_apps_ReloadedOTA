@@ -17,7 +17,7 @@ object SystemPropertiesProxy {
         try {
 
             val cl = context.classLoader
-            val systemProperties = cl.loadClass("android.os.systemProperties")
+            val systemProperties = cl.loadClass("android.os.SystemProperties")
 
             //Parameters Types
             val paramTypes = arrayOfNulls<Class<*>>(1)
@@ -53,7 +53,7 @@ object SystemPropertiesProxy {
         try {
 
             val cl = context.classLoader
-            val systemProperties = cl.loadClass("android.os.systemProperties")
+            val systemProperties = cl.loadClass("android.os.SystemProperties")
 
             //Parameters Types
             val paramTypes = arrayOfNulls<Class<*>>(2)
@@ -93,7 +93,7 @@ object SystemPropertiesProxy {
         try {
 
             val cl = context.classLoader
-            val systemProperties = cl.loadClass("android.os.systemProperties")
+            val systemProperties = cl.loadClass("android.os.SystemProperties")
 
             //Parameters Types
             val paramTypes = arrayOfNulls<Class<*>>(2)
@@ -134,7 +134,7 @@ object SystemPropertiesProxy {
         try {
 
             val cl = context.classLoader
-            val systemProperties = cl.loadClass("android.os.systemProperties")
+            val systemProperties = cl.loadClass("android.os.SystemProperties")
 
             //Parameters Types
             val paramTypes = arrayOfNulls<Class<*>>(2)
@@ -180,7 +180,7 @@ object SystemPropertiesProxy {
         try {
 
             val cl = context.classLoader
-            val systemProperties = cl.loadClass("android.os.systemProperties")
+            val systemProperties = cl.loadClass("android.os.SystemProperties")
 
             //Parameters Types
             val paramTypes = arrayOfNulls<Class<*>>(2)
@@ -217,7 +217,7 @@ object SystemPropertiesProxy {
 
         try {
 
-            val systemProperties = Class.forName("android.os.systemProperties")
+            val systemProperties = Class.forName("android.os.SystemProperties")
 
             //Parameters Types
             val paramTypes = arrayOfNulls<Class<*>>(2)
