@@ -29,5 +29,5 @@ LOCAL_MODULE_CLASS := APPS
 LOCAL_BUILT_MODULE_STEM := package.apk
 LOCAL_CERTIFICATE := PRESIGNED
 LOCAL_DEX_PREOPT := false
-LOCAL_SRC_FILES := $(LOCAL_PATH)/app/release/app-release.apk
+LOCAL_SRC_FILES := app/release/app-release.apk
 include $(BUILD_PREBUILT)

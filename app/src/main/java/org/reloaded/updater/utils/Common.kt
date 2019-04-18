@@ -18,5 +18,9 @@ class Common {
                 false -> "20190101"
             }
         }
+
+        fun getDevice(context: Context) : String{
+            return SystemPropertiesProxy[context, "ro.reloaded.device","unknown"]
+        }
     }
 }

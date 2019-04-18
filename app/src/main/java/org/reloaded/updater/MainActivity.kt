@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                 }
             }
 
-            findViewById<TextView>(R.id.device).text = android.os.Build.DEVICE
+            findViewById<TextView>(R.id.device).text = Common.getDevice(this)
             findViewById<TextView>(R.id.builddt).text = Common.getBuildDate(this)
             findViewById<TextView>(R.id.maintainer_name).text = response.maintainerName
             xda_thread.setOnClickListener {
