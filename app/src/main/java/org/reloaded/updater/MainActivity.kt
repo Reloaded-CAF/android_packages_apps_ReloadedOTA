@@ -28,6 +28,9 @@ import org.reloaded.updater.api.Response
 import org.reloaded.updater.tasks.CheckUpdate
 import org.reloaded.updater.utils.Common
 import org.reloaded.updater.utils.OTAService
+import android.content.pm.PackageManager
+import org.reloaded.updater.utils.BootReceiver
+
 
 class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
@@ -37,6 +40,14 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         setContentView(R.layout.activity_main)
 
         scheduleJob()
+
+        val onBootReceiver = ComponentName(application.packageName, BootReceiver::class.java.name)
+        if (packageManager.getComponentEnabledSetting(onBootReceiver) != PackageManager.COMPONENT_ENABLED_STATE_ENABLED)
+            packageManager.setComponentEnabledSetting(
+                onBootReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+            )
 
         fab.setOnClickListener {
 
