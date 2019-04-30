@@ -30,7 +30,6 @@ class BootReceiver: BroadcastReceiver() {
                         get() = context
 
                     override fun processResult(response: Response) {
-
                         if (response.deviceSupported == 1 && response.updateAvailable == 1) {
                             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                             val notifyID = 1

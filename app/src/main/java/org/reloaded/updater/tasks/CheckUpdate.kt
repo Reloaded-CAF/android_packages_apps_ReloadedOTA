@@ -4,13 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
 import android.provider.Settings
-import org.jetbrains.anko.toast
 import org.reloaded.updater.api.ApiClient
 import org.reloaded.updater.api.ApiInterface
 import org.reloaded.updater.api.Response
 import org.reloaded.updater.utils.Common
 import retrofit2.Call
 import retrofit2.Callback
+import java.util.Date
+import java.text.SimpleDateFormat
 
 
 class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCallback) : AsyncTask<Void, Void, Response>() {
@@ -35,6 +36,12 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
         val call = apiInterface?.checkupdates(device, androidId, buildDate)
         var updateResponse = Response()
         var responseReceived = false
+
+        val date = Date()
+        val format = SimpleDateFormat("d MMMM")
+        val spe = callback.callbackContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE).edit()
+        spe.putString("last_check", format.format(date))
+        spe.apply()
 
         call?.enqueue(object : Callback<Response> {
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {

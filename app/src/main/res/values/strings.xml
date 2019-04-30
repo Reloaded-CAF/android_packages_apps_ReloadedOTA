@@ -1,23 +1,38 @@
 <resources>
-    <string name="app_name">Updater</string>
-    <string name="large_text">
-        "Latest Zip"
-    </string>
-    <string name="yerbuild">"Your Build:"</string>
-    <string name="ourbuild">"Latest Build:"</string>
-    <string name="nonet">"Please Turn on Cellular Data/WiFi!"</string>
-    <string name="testbuild">"Testing Build"</string>
-    <string name="lat_buttontxt">"Download"</string>
-    <string name="rom_info">"ROM Info"</string>
-    <string name="buildd_title">"Build"</string>
-    <string name="device_title">"Device"</string>
-    <string name="maintainer_title">"Maintainer"</string>
-    <string name="xda_title">"Thread"</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">System updates</string>
+    <string name="last_check">Last check - %s</string>
+    <string name="check_update">Check Update</string>
+
+    <!-- Latest Build -->
+    <string name="latest_build">Latest Build</string>
+    <string name="checking_update">Checking for updates!</string>
+    <string name="updated">You are up to date!</string>
+    <string name="update_is_available">Update is available.</string>
+    <string name="download">Download</string>
+
+    <!-- Dialogs -->
+    <string name="no_internet_title">No Internet Access</string>
+    <string name="no_internet">Please Turn on Cellular Data/WiFi to fetch updates!</string>
+    <string name="device_not_supported">Your device is not officially supported.</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="browser_window">This will open a browser window</string>
+    <string name="update_available">Update available!</string>
+    <string name="latest_build_download">Latest Build: %s \n\nDownload Now?</string>
+    <string name="error">Error!</string>
+    <string name="quit">Quit</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+
+    <!-- ROM Information -->
+    <string name="rom_info">ROM Information</string>
+    <string name="build_date_title">Build Date:</string>
+    <string name="device_title">Device:</string>
+    <string name="maintainer_title">Maintainer:</string>
+    <string name="xda_thread">visit xda thread</string>
 
     <!-- Notifications -->
-    <string name="notification_message">New version is available!</string>
-    <string name="notification_title">Update available!</string>
-    <string name="channel">Reloaded-CAF Updates</string>
-    <string name="channel_description">Notifications about new Reloaded-CAF updates</string>
+    <string name="notification_title">New version is available!</string>
+    <string name="notification_message">New Reloaded Build is ready to download.</string>
+    <string name="channel">Reloaded Updates</string>
+    <string name="channel_description">Notifications about new Reloaded Updates.</string>
 </resources>

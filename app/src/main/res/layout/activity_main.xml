@@ -1,96 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:layout_marginBottom="-7dp"
+        android:id="@+id/progressBar"
+        android:progressTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:visibility="gone"/>
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
-            android:fitsSystemWindows="true"
-            android:layout_height="@dimen/app_bar_height"
-            android:layout_width="match_parent"
-            android:theme="@style/AppTheme.AppBarOverlay">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/logo"
+        android:layout_marginHorizontal="50dp"
+        android:layout_below="@id/progressBar"
+        android:id="@+id/logo" />
 
-        <ImageView
-            android:id="@+id/imageViewplaces"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_toast" />
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="#000"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <TextView
+        android:text=""
+        android:layout_below="@id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_refresh"/>
+        android:id="@+id/update_status"
+        android:layout_marginHorizontal="50dp"
+        android:drawablePadding="6dp"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
-    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".MainActivity">
+    <com.alespero.expandablecardview.ExpandableCardView
+        android:id="@+id/latest_build"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/update_status"
+        android:layout_marginHorizontal="30dp"
+        app:animationDuration="300"
+        app:expandOnClick="true"
+        app:icon="@drawable/ic_latest_zip"
+        app:inner_view="@layout/update_layout"
+        app:startExpanded="false"
+        app:title="@string/latest_build" />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="0dp"
-            android:orientation="vertical"
-            android:clipChildren="false"
-            tools:context=".MainActivity"
-            android:background="#FAFAFA">
+    <com.alespero.expandablecardview.ExpandableCardView
+        android:id="@+id/rominfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/latest_build"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="30dp"
+        app:animationDuration="300"
+        app:expandOnClick="true"
+        app:icon="@drawable/ic_rom_info"
+        app:inner_view="@layout/rominfo_layout"
+        app:startExpanded="false"
+        app:title="@string/rom_info" />
 
-            <com.alespero.expandablecardview.ExpandableCardView
-                android:id="@+id/latzip"
-                android:layout_width="330dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:layout_marginTop="20dp"
-                app:animationDuration="300"
-                app:expandOnClick="true"
-                app:icon="@drawable/ic_zip"
-                app:inner_view="@layout/update_layout"
-                app:startExpanded="false"
-                app:title="@string/large_text" />
+    <Button
+        android:text="@string/check_update"
+        android:layout_below="@id/rominfo"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:paddingHorizontal="30dp"
+        android:textSize="13sp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_btn"
+        android:textColor="#fff"
+        android:drawableStart="@drawable/ic_refresh"
+        android:drawablePadding="6dp"
+        android:textAllCaps="false"
+        android:id="@+id/check_update"/>
 
-            <com.alespero.expandablecardview.ExpandableCardView
-                android:id="@+id/rominfo"
-                android:layout_width="330dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:layout_marginTop="20dp"
-                app:animationDuration="300"
-                app:expandOnClick="true"
-                app:icon="@drawable/ic_device_color_primary"
-                app:inner_view="@layout/info_layout"
-                app:startExpanded="false"
-                app:title="@string/rom_info" />
+    <TextView
+        android:text=""
+        android:layout_below="@id/check_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/last_check"
+        android:layout_marginVertical="20dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:textColor="@color/md_disabled_text_light_theme" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text=""
-                android:textColor="#000"
-                android:textSize="20sp" />
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>
+</ScrollView>
+</RelativeLayout>

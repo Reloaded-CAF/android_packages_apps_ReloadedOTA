@@ -3,6 +3,9 @@
 package org.reloaded.updater
 
 import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
@@ -11,10 +14,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View.*
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,15 +22,17 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.alespero.expandablecardview.ExpandableCardView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.info_layout.*
+import kotlinx.android.synthetic.main.rominfo_layout.*
 import org.jetbrains.anko.toast
 import org.reloaded.updater.api.Response
 import org.reloaded.updater.tasks.CheckUpdate
 import org.reloaded.updater.utils.Common
 import org.reloaded.updater.utils.OTAService
 import android.content.pm.PackageManager
+import android.view.MenuItem
+import android.widget.ProgressBar
+import androidx.core.app.NotificationCompat
 import org.reloaded.updater.utils.BootReceiver
-
 
 class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
@@ -38,6 +40,12 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+
+        val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
+        val lastCheck = resources.getString(R.string.last_check,sp.getString("last_check",""))
+        findViewById<TextView>(R.id.last_check).text = lastCheck
 
         scheduleJob()
 
@@ -49,20 +57,15 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                 PackageManager.DONT_KILL_APP
             )
 
-        fab.setOnClickListener {
-
+        check_update.setOnClickListener {
             if (Common.checkNetwork(baseContext)) {
-                val rotateAnim = AnimationUtils.loadAnimation(this, R.anim.rotate)
-                fab.startAnimation(rotateAnim)
-
-
-
                 val extras = intent.extras
                 if (extras != null) {
                     val response = extras.getSerializable("response") as Response
                     processResult(response)
                 } else {
-                    toast("Checking for updates!")
+                    findViewById<ProgressBar>(R.id.progressBar).visibility = VISIBLE
+                    toast(R.string.checking_update)
                     val checkUpdateTask = CheckUpdate(false, this)
                     checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 }
@@ -70,18 +73,20 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
             } else{
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
-                    title(text = "No Internet Access")
-                    message(text = "Turn on Cellular Data/WiFi to fetch updates!")
-                    negativeButton(text = "Quit") { finish(); moveTaskToBack(true) }
+                    title(R.string.no_internet_title)
+                    message(R.string.no_internet)
+                    negativeButton(R.string.quit) { finish(); moveTaskToBack(true) }
                     onDismiss { finish(); moveTaskToBack(true) }
                 }
-                findViewById<ExpandableCardView>(R.id.latzip).visibility = GONE
-                findViewById<Button>(R.id.lat_button).visibility = GONE
+                findViewById<ExpandableCardView>(R.id.latest_build).visibility = GONE
                 findViewById<ExpandableCardView>(R.id.rominfo).visibility = GONE
             }
         }
 
-        fab.performClick()
+        check_update.performClick()
+
+        findViewById<TextView>(R.id.device_name).text = Common.getDevice(this)
+        findViewById<TextView>(R.id.build_date).text = Common.getBuildDateFull(this)
 
     }
 
@@ -102,88 +107,122 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         get() = this
 
     override fun processResult(response: Response) {
+        val latestBuildButton = findViewById<Button>(R.id.latest_build_download)
+        val latestBuildLink = response.latestBuildURL
+        val latestBuild = response.latestBuild
+        val latestBuildVersion = findViewById<TextView>(R.id.latest_build_version)
 
-        val latestButton = findViewById<Button>(R.id.lat_button)
-        val latestLink = response.latestBuildURL
-        val linkText = response.latestBuild
-        val latName = findViewById<TextView>(R.id.lat_name)
-
-        latestButton.visibility = INVISIBLE
-        latName.text = linkText
-        latestButton.visibility = VISIBLE
-        latestButton.setOnClickListener{
-            val openURL = Intent(Intent.ACTION_VIEW)
-            openURL.data = Uri.parse(latestLink)
-            startActivity(openURL)
+        latestBuildVersion.text = latestBuild
+        latestBuildVersion.visibility = VISIBLE
+        latestBuildButton.setOnClickListener{
+            MaterialDialog(this@MainActivity).show {
+                title(R.string.are_you_sure)
+                message(R.string.browser_window)
+                positiveButton(R.string.yes) {
+                    val openURL = Intent(Intent.ACTION_VIEW)
+                    openURL.data = Uri.parse(latestBuildLink)
+                    startActivity(openURL)
+                }
+                negativeButton(R.string.cancel) { }
+            }
         }
+        latestBuildButton.visibility = VISIBLE
+
+        val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
+        val lastCheck = resources.getString(R.string.last_check,sp.getString("last_check",""))
+        findViewById<TextView>(R.id.last_check).text = lastCheck
 
         if(response.deviceSupported == 1){
             if (response.updateAvailable == 1) {
+                val updateStatus = findViewById<TextView>(R.id.update_status)
+                updateStatus.setText(R.string.update_is_available)
+                findViewById<ProgressBar>(R.id.progressBar).visibility = GONE
+                updateStatus.visibility = VISIBLE
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_update_available,0,0,0)
+                val latestBuildText = resources.getString(R.string.latest_build_download,response.latestBuild)
                 MaterialDialog(this@MainActivity).show {
-                    icon(R.drawable.ic_update)
-                    title(text = "Update available!")
-                    message(text = "Latest Build: ${response.latestBuild}\nDownload?")
-                    positiveButton(text = "Yes") {
+                    icon(R.drawable.ic_update_available)
+                    title(R.string.update_available)
+                    message(text = latestBuildText)
+                    positiveButton(R.string.yes) {
                         val openURL = Intent(Intent.ACTION_VIEW)
                         openURL.data = Uri.parse(response.latestBuildURL)
                         startActivity(openURL)
                     }
-                    negativeButton(text = "Cancel") { }
+                    negativeButton(R.string.cancel) { }
                 }
+                val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notifyID = 1
+                val id = "reloaded_update"
+                val name = getString(R.string.channel)
+                val description = getString(R.string.channel_description)
+                val importance = NotificationManager.IMPORTANCE_LOW
+                val mChannel = NotificationChannel(id, name, importance)
+                mChannel.description = description
+                notificationManager.createNotificationChannel(mChannel)
+
+                val mBuilder = NotificationCompat.Builder(applicationContext, "Reloaded Updates")
+                    .setSmallIcon(R.drawable.ic_update_available)
+                    .setContentTitle(getString(R.string.notification_title))
+                    .setContentText(getString(R.string.notification_message))
+                    .setOnlyAlertOnce(true)
+                    .setAutoCancel(true)
+                    .setChannelId(id)
+
+                val mIntent = Intent(applicationContext, MainActivity::class.java)
+                mIntent.action = Intent.ACTION_MAIN
+                mIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                mIntent.putExtra("response", response)
+                val pendingIntent = PendingIntent.getActivity(
+                    applicationContext, 0, mIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                mBuilder.setContentIntent(pendingIntent)
+                notificationManager.notify(notifyID, mBuilder.build())
             } else {
-                MaterialDialog(this@MainActivity).show {
-                    icon(R.drawable.ic_checkmark)
-                    title(text = "You are up-to-date!")
-                    negativeButton(text = "Close") { }
-                }
+                val updateStatus= findViewById<TextView>(R.id.update_status)
+                updateStatus.setText(R.string.updated)
+                findViewById<ProgressBar>(R.id.progressBar).visibility = GONE
+                updateStatus.visibility = VISIBLE
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_updated,0,0,0)
             }
 
-            findViewById<TextView>(R.id.device).text = Common.getDevice(this)
-            findViewById<TextView>(R.id.builddt).text = Common.getBuildDate(this)
             findViewById<TextView>(R.id.maintainer_name).text = response.maintainerName
             xda_thread.setOnClickListener {
                 MaterialDialog(this@MainActivity).show {
-                    title(text = "Are You sure?")
-                    message(text = "This will open a browser window")
-                    positiveButton(text = "Yes") {
+                    title(R.string.are_you_sure)
+                    message(R.string.browser_window)
+                    positiveButton(R.string.yes) {
                         val openURL = Intent(Intent.ACTION_VIEW)
                         openURL.data = Uri.parse(response.xdaLink)
                         startActivity(openURL)
                     }
-                    negativeButton(text = "Cancel") { }
+                    negativeButton(R.string.cancel) { }
                 }
             }
-            fab.clearAnimation()
         }else{
-            findViewById<ExpandableCardView>(R.id.latzip).visibility = GONE
-            findViewById<Button>(R.id.lat_button).visibility = GONE
+            findViewById<ExpandableCardView>(R.id.latest_build).visibility = GONE
             findViewById<ExpandableCardView>(R.id.rominfo).visibility = GONE
             MaterialDialog(this@MainActivity).show {
                 icon(R.drawable.ic_warning)
-                title(text = "Error!")
-                message(text = "Your device is not officially supported.")
-                negativeButton(text = "Quit") { finish(); moveTaskToBack(true) }
+                title(R.string.error)
+                message(R.string.device_not_supported)
+                negativeButton(R.string.quit) { finish(); moveTaskToBack(true) }
                 onDismiss { finish(); moveTaskToBack(true) }
             }
-            fab.clearAnimation()
         }
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.getItemId()) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 }
