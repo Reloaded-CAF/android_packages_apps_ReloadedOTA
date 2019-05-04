@@ -12,14 +12,6 @@ class Common {
         }
 
         fun getBuildDate(context: Context) : String{
-            val version = SystemPropertiesProxy[context, "ro.reloaded.version"]
-            return when(version != ""){
-                true -> version.split("-")[3]
-                false -> "20190101"
-            }
-        }
-
-        fun getBuildDateFull(context: Context) : String{
             val date = SystemPropertiesProxy[context, "ro.build.date"]
             val format = SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy")
             val dateObj = format.parse(date)

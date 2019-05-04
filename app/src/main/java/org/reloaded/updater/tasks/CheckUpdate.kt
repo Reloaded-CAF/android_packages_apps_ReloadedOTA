@@ -31,9 +31,9 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
     @SuppressLint("HardwareIds")
     override fun doInBackground(vararg params: Void?): Response {
         val device = Common.getDevice(callback?.callbackContext!!)
-        val buildDate = Common.getBuildDate(callback.callbackContext)
+        val version = Common.getVersion(callback.callbackContext)
         val androidId = Settings.Secure.getString(callback.callbackContext.contentResolver, Settings.Secure.ANDROID_ID)
-        val call = apiInterface?.checkupdates(device, androidId, buildDate)
+        val call = apiInterface?.checkupdates(device, androidId, version)
         var updateResponse = Response()
         var responseReceived = false
 
@@ -47,8 +47,8 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                 if (response.body() != null) {
                     updateResponse = response.body()
-                    responseReceived = true
                 }
+                responseReceived = true
             }
 
             override fun onFailure(call: Call<Response>, t: Throwable) {
