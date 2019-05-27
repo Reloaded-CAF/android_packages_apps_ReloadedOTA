@@ -11,28 +11,35 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.View.*
+import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.alespero.expandablecardview.ExpandableCardView
+import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.rominfo_layout.*
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
 import org.reloaded.updater.api.Response
 import org.reloaded.updater.tasks.CheckUpdate
+import org.reloaded.updater.utils.BootReceiver
 import org.reloaded.updater.utils.Common
 import org.reloaded.updater.utils.OTAService
-import android.content.pm.PackageManager
-import android.view.MenuItem
-import android.widget.ProgressBar
-import androidx.core.app.NotificationCompat
-import org.reloaded.updater.utils.BootReceiver
 
 class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
@@ -41,10 +48,23 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        /* R.id.card is the reference for the root CardView
+         * in the ExpandableCardView.By referencing this root
+         * CardView we're changing the background color of ExpandableCardVIew
+         */
+        latest_build.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
+            resources.getColor(R.color.cardBackground)
+        latest_build.findViewById<TextView>(R.id.title).textColor = Color.WHITE
+        latest_build.findViewById<ImageView>(R.id.arrow).imageTintList = ColorStateList.valueOf(Color.WHITE)
+
+        rominfo.findViewById<ExpandableCardView>(R.id.card).backgroundColor = resources.getColor(R.color.cardBackground)
+        rominfo.findViewById<TextView>(R.id.title).textColor = Color.WHITE
+        rominfo.findViewById<ImageView>(R.id.arrow).imageTintList = ColorStateList.valueOf(Color.WHITE)
 
         val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
-        val lastCheck = resources.getString(R.string.last_check,sp.getString("last_check",""))
+        val lastCheck = resources.getString(R.string.last_check, sp.getString("last_check", ""))
         findViewById<TextView>(R.id.last_check).text = lastCheck
 
         scheduleJob()
@@ -70,7 +90,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                     checkUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 }
 
-            } else{
+            } else {
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_no_wifi)
                     title(R.string.no_internet_title)
@@ -114,7 +134,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
         latestBuildVersion.text = latestBuild
         latestBuildVersion.visibility = VISIBLE
-        latestBuildButton.setOnClickListener{
+        latestBuildButton.setOnClickListener {
             MaterialDialog(this@MainActivity).show {
                 title(R.string.are_you_sure)
                 message(R.string.browser_window)
@@ -129,17 +149,17 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         latestBuildButton.visibility = VISIBLE
 
         val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
-        val lastCheck = resources.getString(R.string.last_check,sp.getString("last_check",""))
+        val lastCheck = resources.getString(R.string.last_check, sp.getString("last_check", ""))
         findViewById<TextView>(R.id.last_check).text = lastCheck
 
-        if(response.deviceSupported == 1){
+        if (response.deviceSupported == 1) {
             if (response.updateAvailable == 1) {
                 val updateStatus = findViewById<TextView>(R.id.update_status)
                 updateStatus.setText(R.string.update_is_available)
                 findViewById<ProgressBar>(R.id.progressBar).visibility = GONE
                 updateStatus.visibility = VISIBLE
-                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_update_available,0,0,0)
-                val latestBuildText = resources.getString(R.string.latest_build_download,response.latestBuild)
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_update_available, 0, 0, 0)
+                val latestBuildText = resources.getString(R.string.latest_build_download, response.latestBuild)
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_update_available)
                     title(R.string.update_available)
@@ -151,7 +171,8 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                     }
                     negativeButton(R.string.cancel) { }
                 }
-                val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationManager =
+                    applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val notifyID = 1
                 val id = "reloaded_update"
                 val name = getString(R.string.channel)
@@ -181,11 +202,11 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                 mBuilder.setContentIntent(pendingIntent)
                 notificationManager.notify(notifyID, mBuilder.build())
             } else {
-                val updateStatus= findViewById<TextView>(R.id.update_status)
+                val updateStatus = findViewById<TextView>(R.id.update_status)
                 updateStatus.setText(R.string.updated)
                 findViewById<ProgressBar>(R.id.progressBar).visibility = GONE
                 updateStatus.visibility = VISIBLE
-                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_updated,0,0,0)
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_updated, 0, 0, 0)
             }
 
             findViewById<TextView>(R.id.maintainer_name).text = response.maintainerName
@@ -201,9 +222,9 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                     negativeButton(R.string.cancel) { }
                 }
             }
-        }else{
-            findViewById<ExpandableCardView>(R.id.latest_build).visibility = GONE
-            findViewById<ExpandableCardView>(R.id.rominfo).visibility = GONE
+        } else {
+            findViewById<MaterialCardView>(R.id.latest_build).visibility = GONE
+            findViewById<MaterialCardView>(R.id.rominfo).visibility = GONE
             MaterialDialog(this@MainActivity).show {
                 icon(R.drawable.ic_warning)
                 title(R.string.error)
@@ -216,7 +237,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.getItemId()) {
+        when (item?.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 return true

@@ -28,7 +28,7 @@
     <string name="build_date_title">Build Date:</string>
     <string name="device_title">Device:</string>
     <string name="maintainer_title">Maintainer:</string>
-    <string name="xda_thread">visit xda thread</string>
+    <string name="xda_thread">Visit XDA thread</string>
 
     <!-- Notifications -->
     <string name="notification_title">New version is available!</string>
