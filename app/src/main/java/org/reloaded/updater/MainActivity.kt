@@ -132,7 +132,9 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         val latestBuild = response.latestBuild
         val latestBuildVersion = findViewById<TextView>(R.id.latest_build_version)
 
-        latestBuildVersion.text = latestBuild
+        val latestBuildParts = latestBuild!!.split('-')
+        val latestBuildInfoText = resources.getString(R.string.latest_build_info, latestBuildParts[0], latestBuildParts[1], latestBuildParts[2], latestBuildParts[3])
+        latestBuildVersion.text = latestBuildInfoText
         latestBuildVersion.visibility = VISIBLE
         latestBuildButton.setOnClickListener {
             MaterialDialog(this@MainActivity).show {

@@ -5,6 +5,7 @@
 
     <!-- Latest Build -->
     <string name="latest_build">Latest Build</string>
+    <string name="latest_build_info">Latest Build: %s-%s-%s-%s</string>
     <string name="checking_update">Checking for updates!</string>
     <string name="updated">You are up to date!</string>
     <string name="update_is_available">Update is available.</string>
