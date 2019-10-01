@@ -38,7 +38,7 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
         var responseReceived = false
 
         val date = Date()
-        val format = SimpleDateFormat("d MMMM")
+        val format = SimpleDateFormat("d MMM")
         val spe = callback.callbackContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE).edit()
         spe.putString("last_check", format.format(date))
         spe.apply()

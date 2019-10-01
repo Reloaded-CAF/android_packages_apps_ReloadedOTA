@@ -7,6 +7,6 @@ import retrofit2.http.POST
 
 interface ApiInterface {
     @FormUrlEncoded
-    @POST("check_update.php")
+    @POST("check_update")
     fun checkupdates(@Field("device") device: String, @Field("device_id") device_id: String, @Field("version") version: String): Call<Response>
 }

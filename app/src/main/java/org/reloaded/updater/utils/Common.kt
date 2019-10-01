@@ -15,7 +15,7 @@ class Common {
             val date = SystemPropertiesProxy[context, "ro.build.date"]
             val format = SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy")
             val dateObj = format.parse(date)
-            val simpleDateFormat = SimpleDateFormat("d MMMM yyyy")
+            val simpleDateFormat = SimpleDateFormat("d MMM yyyy")
 
             return simpleDateFormat.format(dateObj)
         }

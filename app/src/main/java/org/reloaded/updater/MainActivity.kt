@@ -59,7 +59,8 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         latest_build.findViewById<TextView>(R.id.title).textColor = Color.WHITE
         latest_build.findViewById<ImageView>(R.id.arrow).imageTintList = ColorStateList.valueOf(Color.WHITE)
 
-        rominfo.findViewById<ExpandableCardView>(R.id.card).backgroundColor = resources.getColor(R.color.cardBackground)
+        rominfo.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
+            resources.getColor(R.color.cardBackground)
         rominfo.findViewById<TextView>(R.id.title).textColor = Color.WHITE
         rominfo.findViewById<ImageView>(R.id.arrow).imageTintList = ColorStateList.valueOf(Color.WHITE)
 
@@ -98,8 +99,8 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                     negativeButton(R.string.quit) { finish(); moveTaskToBack(true) }
                     onDismiss { finish(); moveTaskToBack(true) }
                 }
-                findViewById<ExpandableCardView>(R.id.latest_build).visibility = GONE
-                findViewById<ExpandableCardView>(R.id.rominfo).visibility = GONE
+                findViewById<MaterialCardView>(R.id.latest_build).visibility = GONE
+                findViewById<MaterialCardView>(R.id.rominfo).visibility = GONE
             }
         }
 
