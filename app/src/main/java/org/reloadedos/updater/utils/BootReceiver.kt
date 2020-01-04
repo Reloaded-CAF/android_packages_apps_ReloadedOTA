@@ -1,4 +1,4 @@
-package org.reloaded.updater.utils
+package org.reloadedos.updater.utils
 
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
@@ -10,14 +10,15 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import org.reloaded.updater.MainActivity
-import org.reloaded.updater.R
-import org.reloaded.updater.api.Response
-import org.reloaded.updater.tasks.CheckUpdate
 
-class BootReceiver: BroadcastReceiver() {
+import org.reloadedos.updater.api.Response
+import org.reloadedos.updater.MainActivity
+import org.reloadedos.updater.R
+import org.reloadedos.updater.tasks.CheckUpdate
 
-    private val TAG="ReloadedOTA"
+class BootReceiver : BroadcastReceiver() {
+
+    private val TAG = "ReloadedOTA"
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -46,7 +47,10 @@ class BootReceiver: BroadcastReceiver() {
                                 notificationManager.createNotificationChannel(mChannel)
 
                                 val mBuilder =
-                                    NotificationCompat.Builder(context.applicationContext, "Reloaded Updates")
+                                    NotificationCompat.Builder(
+                                        context.applicationContext,
+                                        "Reloaded Updates"
+                                    )
                                         .setSmallIcon(R.drawable.ic_device)
                                         .setContentTitle(context.getString(R.string.notification_title))
                                         .setContentText(context.getString(R.string.notification_message))

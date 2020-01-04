@@ -2,6 +2,7 @@
     <string name="app_name">System updates</string>
     <string name="last_check">Last check - %s</string>
     <string name="check_update">Check Update</string>
+    <string name="reloaded">Reloaded</string>
 
     <!-- Latest Build -->
     <string name="latest_build">Latest Build</string>

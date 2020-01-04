@@ -1,4 +1,4 @@
-package org.reloaded.updater.utils
+package org.reloadedos.updater.utils
 
 import android.annotation.SuppressLint
 import android.content.Context

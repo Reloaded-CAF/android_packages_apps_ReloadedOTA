@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+    <TextView
+            android:id="@+id/device_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/device_title"
+            android:textSize="16sp" />
+
+    <TextView
+            android:id="@+id/device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_toEndOf="@id/device_title"
+            android:text=""
+            android:textSize="16sp" />
+
+    <TextView
+            android:id="@+id/build_date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/device_title"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/build_date_title"
+            android:textSize="16sp" />
+
+    <TextView
+            android:id="@+id/build_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/device_name"
+            android:layout_alignStart="@id/device_name"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/build_date_title"
+            android:text=""
+            android:textSize="16sp" />
+
+    <TextView
+            android:id="@+id/maintainer_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/build_date_title"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/maintainer_title"
+            android:textSize="16sp" />
+
+    <TextView
+            android:id="@+id/maintainer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/build_date"
+            android:layout_alignStart="@id/device_name"
+            android:layout_marginTop="15dp"
+            android:layout_toEndOf="@id/maintainer_title"
+            android:text=""
+            android:textSize="16sp" />
+
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/xda_thread"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/maintainer_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/colorAccent"
+            android:paddingHorizontal="30dp"
+            android:text="@string/xda_thread"
+            android:textAllCaps="false" />
+</RelativeLayout>

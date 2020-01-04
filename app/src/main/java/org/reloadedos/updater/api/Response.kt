@@ -1,4 +1,4 @@
-package org.reloaded.updater.api
+package org.reloadedos.updater.api
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

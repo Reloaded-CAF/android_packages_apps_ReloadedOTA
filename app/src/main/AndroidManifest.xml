@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.reloaded.updater">
+        package="org.reloadedos.updater">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,29 +12,28 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher"
             android:supportsRtl="true"
-            android:usesCleartextTraffic="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:usesCleartextTraffic="true">
         <activity
-            android:name="org.reloaded.updater.MainActivity"
+                android:name=".MainActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
 
         </activity>
 
         <service
-            android:name="org.reloaded.updater.utils.OTAService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+                android:name=".utils.OTAService"
+                android:exported="true"
+                android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name="org.reloaded.updater.utils.BootReceiver">
+        <receiver android:name=".utils.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
-
 </manifest>

@@ -1,20 +1,21 @@
-package org.reloaded.updater.tasks
+package org.reloadedos.updater.tasks
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
 import android.provider.Settings
-import org.reloaded.updater.api.ApiClient
-import org.reloaded.updater.api.ApiInterface
-import org.reloaded.updater.api.Response
-import org.reloaded.updater.utils.Common
+import java.text.SimpleDateFormat
+import java.util.Date
 import retrofit2.Call
 import retrofit2.Callback
-import java.util.Date
-import java.text.SimpleDateFormat
 
+import org.reloadedos.updater.api.ApiClient
+import org.reloadedos.updater.api.ApiInterface
+import org.reloadedos.updater.api.Response
+import org.reloadedos.updater.utils.Common
 
-class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCallback) : AsyncTask<Void, Void, Response>() {
+class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCallback) :
+    AsyncTask<Void, Void, Response>() {
 
     private var apiInterface: ApiInterface? = null
     private val callback: UpdateCheckerCallback? = callback
@@ -32,14 +33,19 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
     override fun doInBackground(vararg params: Void?): Response {
         val device = Common.getDevice(callback?.callbackContext!!)
         val version = Common.getVersion(callback.callbackContext)
-        val androidId = Settings.Secure.getString(callback.callbackContext.contentResolver, Settings.Secure.ANDROID_ID)
+        val androidId = Settings.Secure.getString(
+            callback.callbackContext.contentResolver,
+            Settings.Secure.ANDROID_ID
+        )
         val call = apiInterface?.checkupdates(device, androidId, version)
         var updateResponse = Response()
         var responseReceived = false
 
         val date = Date()
         val format = SimpleDateFormat("d MMM")
-        val spe = callback.callbackContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE).edit()
+        val spe =
+            callback.callbackContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
+                .edit()
         spe.putString("last_check", format.format(date))
         spe.apply()
 

@@ -1,4 +1,4 @@
-package org.reloaded.updater.api
+package org.reloadedos.updater.api
 
 import retrofit2.Call
 import retrofit2.http.Field

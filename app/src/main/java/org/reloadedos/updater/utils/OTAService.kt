@@ -1,21 +1,22 @@
-package org.reloaded.updater.utils
+package org.reloadedos.updater.utils
 
 import android.app.job.JobParameters
 import android.app.job.JobService
-import android.content.Context
-import android.os.AsyncTask
-import org.reloaded.updater.api.Response
-import org.reloaded.updater.tasks.CheckUpdate
-import java.lang.Exception
-import android.app.PendingIntent
-import android.content.Intent
-import org.reloaded.updater.MainActivity
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.AsyncTask
 import androidx.core.app.NotificationCompat
-import org.reloaded.updater.R
+import java.lang.Exception
 
-class OTAService: JobService(), CheckUpdate.UpdateCheckerCallback {
+import org.reloadedos.updater.api.Response
+import org.reloadedos.updater.MainActivity
+import org.reloadedos.updater.R
+import org.reloadedos.updater.tasks.CheckUpdate
+
+class OTAService : JobService(), CheckUpdate.UpdateCheckerCallback {
 
     override fun onStopJob(params: JobParameters?): Boolean {
         return false
@@ -40,7 +41,8 @@ class OTAService: JobService(), CheckUpdate.UpdateCheckerCallback {
     override fun processResult(response: Response) {
 
         if (response.deviceSupported == 1 && response.updateAvailable == 1) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val notifyID = 1
             val id = "reloaded_update"
             val name = getString(R.string.channel)

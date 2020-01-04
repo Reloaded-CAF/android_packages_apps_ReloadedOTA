@@ -1,7 +1,7 @@
-package org.reloaded.updater.api
+package org.reloadedos.updater.api
 
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Retrofit
 
 object ApiClient {
     private const val BASE_URL = "https://reloadedrom.com/api/"

@@ -1,111 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-7dp"
-            android:layout_marginBottom="-7dp"
-            android:indeterminate="true"
-            android:indeterminateTintMode="src_in"
-            android:progressTint="@color/colorAccent"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@id/progressBar"
-            android:layout_marginHorizontal="50dp"
-            app:srcCompat="@drawable/logo" />
-
-        <TextView
-            android:id="@+id/update_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/logo"
-            android:layout_marginHorizontal="50dp"
-            android:drawablePadding="6dp"
-            android:text=""
-            android:textSize="16sp"
-            android:visibility="gone" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/latest_build"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/update_status"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="20dp"
-            android:elevation="8dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:cardCornerRadius="8dp">
-
-            <com.alespero.expandablecardview.ExpandableCardView
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                app:animationDuration="300"
-                app:expandOnClick="true"
-                app:icon="@drawable/ic_latest_zip"
-                app:inner_view="@layout/update_layout"
-                app:startExpanded="false"
-                app:title="@string/latest_build" />
+                android:layout_marginTop="-7dp"
+                android:layout_marginBottom="-7dp"
+                android:indeterminate="true"
+                android:indeterminateTintMode="src_in"
+                android:progressTint="@color/colorAccent"
+                android:visibility="gone" />
+
+        <ImageView
+                android:id="@+id/logo"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@id/progressBar"
+                android:layout_marginHorizontal="50dp"
+                android:contentDescription="@string/reloaded"
+                app:srcCompat="@drawable/logo" />
+
+        <TextView
+                android:id="@+id/update_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_marginHorizontal="50dp"
+                android:drawablePadding="6dp"
+                android:text=""
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+        <com.google.android.material.card.MaterialCardView
+                android:id="@+id/latest_build"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/update_status"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="20dp"
+                android:elevation="8dp"
+                app:cardBackgroundColor="@color/cardBackground"
+                app:cardCornerRadius="8dp">
+
+            <com.alespero.expandablecardview.ExpandableCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|top"
+                    app:animationDuration="300"
+                    app:expandOnClick="true"
+                    app:icon="@drawable/ic_latest_zip"
+                    app:inner_view="@layout/update_layout"
+                    app:startExpanded="false"
+                    app:title="@string/latest_build" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/rominfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/latest_build"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginTop="20dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:cardCornerRadius="8dp">
+                android:id="@+id/rom_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/latest_build"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@color/cardBackground"
+                app:cardCornerRadius="8dp">
 
             <com.alespero.expandablecardview.ExpandableCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:animationDuration="300"
-                app:expandOnClick="true"
-                app:icon="@drawable/ic_rom_info"
-                app:inner_view="@layout/rominfo_layout"
-                app:startExpanded="false"
-                app:title="@string/rom_info" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:animationDuration="300"
+                    app:expandOnClick="true"
+                    app:icon="@drawable/ic_rom_info"
+                    app:inner_view="@layout/rom_info_layout"
+                    app:startExpanded="false"
+                    app:title="@string/rom_info" />
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/check_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rominfo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/colorAccent"
-            android:paddingHorizontal="30dp"
-            android:text="@string/check_update"
-            android:textAllCaps="false"
-            app:icon="@drawable/ic_refresh" />
+                android:id="@+id/check_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rom_info"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/colorAccent"
+                android:paddingHorizontal="30dp"
+                android:text="@string/check_update"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_refresh" />
 
         <TextView
-            android:id="@+id/last_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/check_update"
-            android:layout_centerHorizontal="true"
-            android:layout_marginVertical="20dp"
-            android:text=""
-            android:textColor="@color/md_disabled_text_light_theme"
-            android:textSize="14sp" />
+                android:id="@+id/last_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/check_update"
+                android:layout_centerHorizontal="true"
+                android:layout_marginVertical="20dp"
+                android:text=""
+                android:textColor="@color/md_disabled_text_light_theme"
+                android:textSize="14sp" />
 
     </RelativeLayout>
 </ScrollView>

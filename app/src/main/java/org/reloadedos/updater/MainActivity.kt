@@ -1,13 +1,13 @@
 @file:Suppress("ConstantConditionIf")
 
-package org.reloaded.updater
+package org.reloadedos.updater
 
 import android.app.AlarmManager
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -26,20 +26,21 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.MaterialDialog
 import com.alespero.expandablecardview.ExpandableCardView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.rominfo_layout.*
+import kotlinx.android.synthetic.main.rom_info_layout.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.textColor
 import org.jetbrains.anko.toast
-import org.reloaded.updater.api.Response
-import org.reloaded.updater.tasks.CheckUpdate
-import org.reloaded.updater.utils.BootReceiver
-import org.reloaded.updater.utils.Common
-import org.reloaded.updater.utils.OTAService
+
+import org.reloadedos.updater.api.Response
+import org.reloadedos.updater.tasks.CheckUpdate
+import org.reloadedos.updater.utils.BootReceiver
+import org.reloadedos.updater.utils.Common
+import org.reloadedos.updater.utils.OTAService
 
 class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
@@ -57,12 +58,14 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         latest_build.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
             resources.getColor(R.color.cardBackground)
         latest_build.findViewById<TextView>(R.id.title).textColor = Color.WHITE
-        latest_build.findViewById<ImageView>(R.id.arrow).imageTintList = ColorStateList.valueOf(Color.WHITE)
+        latest_build.findViewById<ImageView>(R.id.arrow).imageTintList =
+            ColorStateList.valueOf(Color.WHITE)
 
-        rominfo.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
+        rom_info.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
             resources.getColor(R.color.cardBackground)
-        rominfo.findViewById<TextView>(R.id.title).textColor = Color.WHITE
-        rominfo.findViewById<ImageView>(R.id.arrow).imageTintList = ColorStateList.valueOf(Color.WHITE)
+        rom_info.findViewById<TextView>(R.id.title).textColor = Color.WHITE
+        rom_info.findViewById<ImageView>(R.id.arrow).imageTintList =
+            ColorStateList.valueOf(Color.WHITE)
 
         val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
         val lastCheck = resources.getString(R.string.last_check, sp.getString("last_check", ""))
@@ -100,7 +103,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                     onDismiss { finish(); moveTaskToBack(true) }
                 }
                 findViewById<MaterialCardView>(R.id.latest_build).visibility = GONE
-                findViewById<MaterialCardView>(R.id.rominfo).visibility = GONE
+                findViewById<MaterialCardView>(R.id.rom_info).visibility = GONE
             }
         }
 
@@ -134,7 +137,13 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         val latestBuildVersion = findViewById<TextView>(R.id.latest_build_version)
 
         val latestBuildParts = latestBuild!!.split('-')
-        val latestBuildInfoText = resources.getString(R.string.latest_build_info, latestBuildParts[0], latestBuildParts[1], latestBuildParts[2], latestBuildParts[3])
+        val latestBuildInfoText = resources.getString(
+            R.string.latest_build_info,
+            latestBuildParts[0],
+            latestBuildParts[1],
+            latestBuildParts[2],
+            latestBuildParts[3]
+        )
         latestBuildVersion.text = latestBuildInfoText
         latestBuildVersion.visibility = VISIBLE
         latestBuildButton.setOnClickListener {
@@ -161,8 +170,14 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
                 updateStatus.setText(R.string.update_is_available)
                 findViewById<ProgressBar>(R.id.progressBar).visibility = GONE
                 updateStatus.visibility = VISIBLE
-                updateStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_update_available, 0, 0, 0)
-                val latestBuildText = resources.getString(R.string.latest_build_download, response.latestBuild)
+                updateStatus.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_update_available,
+                    0,
+                    0,
+                    0
+                )
+                val latestBuildText =
+                    resources.getString(R.string.latest_build_download, response.latestBuild)
                 MaterialDialog(this@MainActivity).show {
                     icon(R.drawable.ic_update_available)
                     title(R.string.update_available)
@@ -227,7 +242,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
             }
         } else {
             findViewById<MaterialCardView>(R.id.latest_build).visibility = GONE
-            findViewById<MaterialCardView>(R.id.rominfo).visibility = GONE
+            findViewById<MaterialCardView>(R.id.rom_info).visibility = GONE
             MaterialDialog(this@MainActivity).show {
                 icon(R.drawable.ic_warning)
                 title(R.string.error)

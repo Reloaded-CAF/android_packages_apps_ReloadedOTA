@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "org.reloaded.updater"
+        applicationId "org.reloadedos.updater"
         minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
