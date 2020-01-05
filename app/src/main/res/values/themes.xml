@@ -1,0 +1,10 @@
+<resources>
+
+    <style name="AppThemeBase" parent="Theme.MaterialComponents.Light">
+        <item name="actionBarStyle">@style/ActionBarLight</item>
+        <item name="android:actionBarStyle">@style/ActionBarLight</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cardBackground">#1B1B1B</color>
+    <color name="cardTextColor">@android:color/white</color>
+    <color name="textMuted">#EDF2F7</color>
+</resources>

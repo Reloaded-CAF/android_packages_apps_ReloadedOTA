@@ -72,6 +72,7 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/colorAccent"
             android:paddingHorizontal="30dp"
+            android:textColor="@android:color/white"
             android:text="@string/xda_thread"
             android:textAllCaps="false" />
 </RelativeLayout>

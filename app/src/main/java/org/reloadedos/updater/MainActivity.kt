@@ -13,7 +13,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -44,8 +43,8 @@ import org.reloadedos.updater.utils.OTAService
 
 class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -57,15 +56,17 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
          */
         latest_build.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
             resources.getColor(R.color.cardBackground)
-        latest_build.findViewById<TextView>(R.id.title).textColor = Color.WHITE
+        latest_build.findViewById<TextView>(R.id.title).textColor =
+            resources.getColor(R.color.cardTextColor)
         latest_build.findViewById<ImageView>(R.id.arrow).imageTintList =
-            ColorStateList.valueOf(Color.WHITE)
+            ColorStateList.valueOf(resources.getColor(R.color.cardTextColor))
 
         rom_info.findViewById<ExpandableCardView>(R.id.card).backgroundColor =
             resources.getColor(R.color.cardBackground)
-        rom_info.findViewById<TextView>(R.id.title).textColor = Color.WHITE
+        rom_info.findViewById<TextView>(R.id.title).textColor =
+            resources.getColor(R.color.cardTextColor)
         rom_info.findViewById<ImageView>(R.id.arrow).imageTintList =
-            ColorStateList.valueOf(Color.WHITE)
+            ColorStateList.valueOf(resources.getColor(R.color.cardTextColor))
 
         val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
         val lastCheck = resources.getString(R.string.last_check, sp.getString("last_check", ""))
@@ -131,40 +132,40 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
         get() = this
 
     override fun processResult(response: Response) {
-        val latestBuildButton = findViewById<Button>(R.id.latest_build_download)
-        val latestBuildLink = response.latestBuildURL
-        val latestBuild = response.latestBuild
-        val latestBuildVersion = findViewById<TextView>(R.id.latest_build_version)
-
-        val latestBuildParts = latestBuild!!.split('-')
-        val latestBuildInfoText = resources.getString(
-            R.string.latest_build_info,
-            latestBuildParts[0],
-            latestBuildParts[1],
-            latestBuildParts[2],
-            latestBuildParts[3]
-        )
-        latestBuildVersion.text = latestBuildInfoText
-        latestBuildVersion.visibility = VISIBLE
-        latestBuildButton.setOnClickListener {
-            MaterialDialog(this@MainActivity).show {
-                title(R.string.are_you_sure)
-                message(R.string.browser_window)
-                positiveButton(R.string.yes) {
-                    val openURL = Intent(Intent.ACTION_VIEW)
-                    openURL.data = Uri.parse(latestBuildLink)
-                    startActivity(openURL)
-                }
-                negativeButton(R.string.cancel) { }
-            }
-        }
-        latestBuildButton.visibility = VISIBLE
-
-        val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
-        val lastCheck = resources.getString(R.string.last_check, sp.getString("last_check", ""))
-        findViewById<TextView>(R.id.last_check).text = lastCheck
-
         if (response.deviceSupported == 1) {
+            val latestBuildButton = findViewById<Button>(R.id.latest_build_download)
+            val latestBuildLink = response.latestBuildURL
+            val latestBuild = response.latestBuild
+            val latestBuildVersion = findViewById<TextView>(R.id.latest_build_version)
+
+            val latestBuildParts = latestBuild!!.split('-')
+            val latestBuildInfoText = resources.getString(
+                R.string.latest_build_info,
+                latestBuildParts[0],
+                latestBuildParts[1],
+                latestBuildParts[2],
+                latestBuildParts[3]
+            )
+            latestBuildVersion.text = latestBuildInfoText
+            latestBuildVersion.visibility = VISIBLE
+            latestBuildButton.setOnClickListener {
+                MaterialDialog(this@MainActivity).show {
+                    title(R.string.are_you_sure)
+                    message(R.string.browser_window)
+                    positiveButton(R.string.yes) {
+                        val openURL = Intent(Intent.ACTION_VIEW)
+                        openURL.data = Uri.parse(latestBuildLink)
+                        startActivity(openURL)
+                    }
+                    negativeButton(R.string.cancel) { }
+                }
+            }
+            latestBuildButton.visibility = VISIBLE
+
+            val sp = applicationContext.getSharedPreferences("reloaded_pref", Context.MODE_PRIVATE)
+            val lastCheck = resources.getString(R.string.last_check, sp.getString("last_check", ""))
+            findViewById<TextView>(R.id.last_check).text = lastCheck
+
             if (response.updateAvailable == 1) {
                 val updateStatus = findViewById<TextView>(R.id.update_status)
                 updateStatus.setText(R.string.update_is_available)

@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="AppThemeBase" parent="Theme.MaterialComponents">
+        <item name="actionBarStyle">@style/ActionBarDark</item>
+        <item name="android:actionBarStyle">@style/ActionBarDark</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

@@ -93,8 +93,10 @@
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/colorAccent"
                 android:paddingHorizontal="30dp"
+                android:textColor="@android:color/white"
                 android:text="@string/check_update"
                 android:textAllCaps="false"
+                app:iconTint="@android:color/white"
                 app:icon="@drawable/ic_refresh" />
 
         <TextView
@@ -105,7 +107,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginVertical="20dp"
                 android:text=""
-                android:textColor="@color/md_disabled_text_light_theme"
+                android:textColor="@color/textMuted"
                 android:textSize="14sp" />
 
     </RelativeLayout>
