@@ -31,13 +31,13 @@ class CheckUpdate(private val isBackground: Boolean, callback: UpdateCheckerCall
 
     @SuppressLint("HardwareIds")
     override fun doInBackground(vararg params: Void?): Response {
-        val device = Common.getDevice(callback?.callbackContext!!)
-        val version = Common.getVersion(callback.callbackContext)
+        val deviceName = Common.getDeviceName(callback?.callbackContext!!)
+        val buildVersion = Common.getBuildVersion(callback.callbackContext)
         val androidId = Settings.Secure.getString(
             callback.callbackContext.contentResolver,
             Settings.Secure.ANDROID_ID
         )
-        val call = apiInterface?.checkupdates(device, androidId, version)
+        val call = apiInterface?.checkUpdate(deviceName, androidId, buildVersion)
         var updateResponse = Response()
         var responseReceived = false
 

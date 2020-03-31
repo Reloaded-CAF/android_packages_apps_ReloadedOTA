@@ -15,24 +15,24 @@ class Common {
         }
 
         fun getBuildDate(context: Context): String {
-            val version = this.getVersion(context)
+            val buildVersion = this.getBuildVersion(context)
             val outputFormat = SimpleDateFormat("d MMM yyyy")
-            if (version.equals("unknown")) {
+            return if (buildVersion.equals("unknown")) {
                 val dateObj = Date(Build.TIME)
-                return outputFormat.format(dateObj)
+                outputFormat.format(dateObj)
             } else {
-                val buildDate = version.split("-")[3]
+                val buildDate = buildVersion.split("-")[3]
                 val format = SimpleDateFormat("yyyyMMdd")
                 val dateObj = format.parse(buildDate)
-                return outputFormat.format(dateObj)
+                outputFormat.format(dateObj)
             }
         }
 
-        fun getVersion(context: Context): String {
+        fun getBuildVersion(context: Context): String {
             return SystemPropertiesProxy[context, "ro.reloaded.version", "unknown"]
         }
 
-        fun getDevice(context: Context): String {
+        fun getDeviceName(context: Context): String {
             return SystemPropertiesProxy[context, "ro.reloaded.device", "unknown"]
         }
     }

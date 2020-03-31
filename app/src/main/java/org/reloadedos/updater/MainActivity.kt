@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), CheckUpdate.UpdateCheckerCallback {
 
         check_update.performClick()
 
-        findViewById<TextView>(R.id.device_name).text = Common.getDevice(this)
+        findViewById<TextView>(R.id.device_name).text = Common.getDeviceName(this)
         findViewById<TextView>(R.id.build_date).text = Common.getBuildDate(this)
 
     }
